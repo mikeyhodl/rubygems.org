@@ -217,8 +217,11 @@ GEM
     m (1.5.1)
       method_source (>= 0.6.7)
       rake (>= 0.9.2.2)
-    mail (2.7.1)
+    mail (2.8.0)
       mini_mime (>= 0.1.1)
+      net-imap
+      net-pop
+      net-smtp
     marcel (1.0.1)
     method_source (1.0.0)
     mime-types (3.3.1)
@@ -231,6 +234,14 @@ GEM
     msgpack (1.4.2)
     multi_json (1.15.0)
     multipart-post (2.1.1)
+    net-imap (0.3.1)
+      net-protocol
+    net-pop (0.1.2)
+      net-protocol
+    net-protocol (0.2.0)
+      timeout
+    net-smtp (0.3.3)
+      net-protocol
     netrc (0.11.0)
     newrelic_rpm (7.1.0)
     nio4r (2.5.7)
@@ -380,6 +391,7 @@ GEM
     statsd-instrument (2.3.5)
     thor (1.1.0)
     tilt (2.0.10)
+    timeout (0.3.1)
     timers (4.1.2)
       hitimes
     toxiproxy (1.0.3)
