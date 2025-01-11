@@ -30,14 +30,14 @@ class NotificationSettingsTest < SystemTest
       choose notifier_off_radio(ownership1, "push")
       choose notifier_off_radio(ownership2, "owner")
 
-      click_button I18n.t("notifiers.show.update")
+      perform_enqueued_jobs only: ActionMailer::MailDeliveryJob do
+        click_button I18n.t("notifiers.show.update")
+      end
     end
 
-    assert_changes :mails_count, from: 0, to: 1 do
-      Delayed::Worker.new.work_off
-    end
+    assert_emails 1
 
-    assert_equal I18n.t("mailer.notifiers_changed.subject"), last_email.subject
+    assert_equal I18n.t("mailer.notifiers_changed.subject", host: Gemcutter::HOST_DISPLAY), last_email.subject
 
     assert_selector "#flash_notice", text: I18n.t("notifiers.update.success")
 
