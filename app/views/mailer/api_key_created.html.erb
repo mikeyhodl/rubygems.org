@@ -10,16 +10,25 @@
 
       <div class="h3-1-center" style="color:#1e1e1e; font-family:Georgia, serif; min-width:auto !important; font-size:20px; line-height:26px;">
         <p>
-          A new API key was created for your account on rubygems.org.
+          A new API key was created for your account on <%= Gemcutter::HOST_DISPLAY %>.
         </p>
         <p>
           Name: <strong><%= @api_key.name %></strong>
           <br>
-          Scope: <strong><%= @api_key.enabled_scopes.join(", ") %></strong>
+          Scope: <strong><%= @api_key.scopes.to_sentence %></strong>
           <br>
           Created at: <strong><%= @api_key.created_at.to_formatted_s(:rfc822) %></strong>
+          <% if @api_key.oidc_id_token.present? %>
+            <br>
+            <%= ApiKey.human_attribute_name(:oidc_api_key_role) %>: <strong><%= link_to(@api_key.oidc_api_key_role.name, profile_oidc_api_key_role_url(@api_key.oidc_api_key_role.token), target: :_blank) %></strong>
+          <% end %>
+          <% if @api_key.expires_at.present? %>
+            <br>
+            <%= ApiKey.human_attribute_name(:expires_at) %>: <strong><%= @api_key.expires_at.to_formatted_s(:rfc822) %></strong>
+          <% end %>
+          <br>
         </p>
-        <br/>
+        <br>
         <% if @api_key.name == "legacy-key" %>
           <p>
             Note that we are in the process of migration from a single API key per account to multiple API keys with minimum scopes enabled.
@@ -28,10 +37,10 @@
             new <strong>POST /api/v1/api_key</strong> endpoint (<%= link_to("Read more", "https://guides.rubygems.org/api-key-scopes/", target: :_blank) %>).
           </p>
 
-          <br/>
+          <br>
           Please feel free to <%= mail_to("support@rubygems.org", "contact us") %> if something feels amiss.
         <% else %>
-          <br/>
+          <br>
           <p>If this key creation is expected, you do not need to take further action.
             <strong>Only if this is unexpected</strong> please take immediate steps to secure your account and gems:
           </p>

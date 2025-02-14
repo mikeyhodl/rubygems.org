@@ -1,28 +1,38 @@
 class NotifiersController < ApplicationController
   before_action :redirect_to_signin, unless: :signed_in?
+  before_action :redirect_to_new_mfa, if: :mfa_required_not_yet_enabled?
+  before_action :redirect_to_settings_strong_mfa_required, if: :mfa_required_weak_level_enabled?
 
   def show
-    @ownerships = current_user.ownerships.by_indexed_gem_name
+    @ownerships = current_user.ownerships.by_indexed_gem_name.includes(:rubygem)
   end
 
   def update
-    to_enable_push = []
-    to_disable_push = []
-    to_enable_owner = []
-    to_disable_owner = []
-    params.require(:ownerships).each do |ownership_id, notifier|
-      (notifier["owner"] == "off" ? to_disable_owner : to_enable_owner) << ownership_id.to_i
-      (notifier["push"] == "off" ? to_disable_push : to_enable_push) << ownership_id.to_i
-    end
+    to_enable_push, to_disable_push = notifier_options("push")
+    to_enable_owner, to_disable_owner = notifier_options("owner")
 
     current_user.transaction do
-      current_user.ownerships.where(id: to_enable_push).update_all(push_notifier: true) if to_enable_push.any?
-      current_user.ownerships.where(id: to_disable_push).update_all(push_notifier: false) if to_disable_push.any?
-      current_user.ownerships.where(id: to_enable_owner).update_all(owner_notifier: true) if to_enable_owner.any?
-      current_user.ownerships.where(id: to_disable_owner).update_all(owner_notifier: false) if to_disable_owner.any?
-      Mailer.delay.notifiers_changed(current_user.id)
+      current_user.ownerships.update_push_notifier(to_enable_push, to_disable_push)
+      current_user.ownerships.update_owner_notifier(to_enable_owner, to_disable_owner)
+      Mailer.notifiers_changed(current_user.id).deliver_later
     end
 
     redirect_to notifier_path, notice: t(".update.success")
+  end
+
+  private
+
+  def notifier_params
+    params.expect(ownerships: [%i[push owner]])
+  end
+
+  def notifier_options(param)
+    to_enable  = []
+    to_disable = []
+    notifier_params.each do |ownership_id, notifier|
+      (notifier[param] == "off" ? to_disable : to_enable) << ownership_id.to_i
+    end
+
+    [to_enable, to_disable]
   end
 end

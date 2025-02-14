@@ -10,14 +10,14 @@
 
       <div class="h3-1-center" style="color:#1e1e1e; font-family:Georgia, serif; min-width:auto !important; font-size:20px; line-height:26px;">
         <p>
-          One of your API keys was revoked on rubygems.org.
+          One of your API keys was revoked on <%= Gemcutter::HOST_DISPLAY %>.
         </p>
         <p>
           Name: <strong><%= @api_key_name %></strong>
-          <br />
+          <br>
           Scope: <strong><%= @enabled_scopes %></strong>
         </p>
-        <br/>
+        <br>
           <p>
             This API key was <a href="<%= @commit_url %>">detected in a public repository</a> by GitHub Secret Scanning. As a result we consider it compromised and have automatically revoked it to prevent any unauthorized access to your account.
           </p>

@@ -12,7 +12,8 @@ class Gemcutter::Middleware::RedirectorTest < ActiveSupport::TestCase
 
   should "forward requests that don't match" do
     get "/specs.4.8.gz", {}, "HTTP_HOST" => Gemcutter::HOST
-    assert last_response.ok?
+
+    assert_predicate last_response, :ok?
   end
 
   should "redirect requests from a non-HOST domain" do
@@ -37,18 +38,21 @@ class Gemcutter::Middleware::RedirectorTest < ActiveSupport::TestCase
     path = "/api/v1/gems"
     post path, {}, "HTTP_HOST" => "gems.rubyforge.org"
 
-    assert last_response.ok?
+    assert_predicate last_response, :ok?
   end
 
   should "allow fastly domains" do
     get "/", {}, "HTTP_HOST" => "index.rubygems.org"
+
     assert_equal 200, last_response.status
     get "/", {}, "HTTP_HOST" => "fastly.rubygems.org"
+
     assert_equal 200, last_response.status
   end
 
   should "allow healthcheck" do
     get "/internal/ping", {}, "HTTP_HOST" => "localhost"
+
     assert_equal 200, last_response.status
   end
 end

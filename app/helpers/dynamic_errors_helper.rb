@@ -40,13 +40,13 @@ module DynamicErrorsHelper
 
         message = options.include?(:message) ? options[:message] : locale.t(:body)
 
-        error_messages = objects.sum do |object|
+        error_messages = objects.map do |object|
           object.errors.full_messages.map do |msg|
             content_tag(:li, msg)
           end
         end.join.html_safe
 
-        contents = ''
+        contents = +''
         contents << content_tag(options[:header_tag] || :h2, header_message) unless header_message.blank?
         contents << content_tag(:p, message) unless message.blank?
         contents << content_tag(:ul, error_messages)
