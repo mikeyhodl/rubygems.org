@@ -66,7 +66,7 @@ gem "kramdown", "~> 2.5"
 gem "zlib", "~> 3.2"
 
 # Admin dashboard
-gem "avo", "~> 3.13"
+gem "avo", "~> 3.22"
 gem "pagy", "~> 8.4"
 gem "view_component", "~> 3.23.2"
 gem "pundit", "~> 2.5"
