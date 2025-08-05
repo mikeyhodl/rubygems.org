@@ -914,7 +914,7 @@ PLATFORMS
 DEPENDENCIES
   aggregate_assertions (~> 0.2.0)
   amazing_print (~> 1.8)
-  avo (~> 3.13)
+  avo (~> 3.22)
   avo-advanced (~> 3.22)!
   avo_upgrade (~> 0.1.1)
   aws-sdk-s3 (~> 1.195)
