@@ -70,7 +70,7 @@ gem "connection_pool", "~> 2.0" # TODO: Remove when Rails makes new release afte
 gem "yaml-schema", "~> 1.2"
 
 # Admin dashboard
-gem "avo", "~> 3.13"
+gem "avo", "~> 3.29"
 gem "pagy", "~> 8.4"
 gem "view_component", "~> 4.2.0"
 gem "pundit", "~> 2.5"
