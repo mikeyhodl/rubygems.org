@@ -13,7 +13,6 @@ AllCops:
     - !ruby/regexp /(vendor|bundle|bin|db/(migrate/|schema\.rb)|tmp|server)($|\/.*)/
   DisplayCopNames: true
   DisplayStyleGuide: true
-  ParserEngine: parser_prism
   TargetRubyVersion: 3.4
   NewCops: enable
 
